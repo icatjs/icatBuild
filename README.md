@@ -1,12 +1,12 @@
 ## icatBuild
 =========
 
-> 用[grunt-init][https://github.com/gruntjs/grunt-init]构建icat项目, 项目中包含css编译、文件合并及压缩。
+> 用[grunt-init][]构建icat项目, 项目中包含css编译、文件合并及压缩。
 
 ## Installation
 1. 请先安装[grunt-init][].
 
-2. 再把模版文件git-clone到`~/.grunt-init/`(%USERPROFILE%\.grunt-init\ on Windows)文件夹里。如下所示：
+2. 再把模版文件git-clone到`~/.grunt-init/`(`%USERPROFILE%\.grunt-init\` on Windows)文件夹里。如下所示：
 
 ```
 git clone https://github.com/valleykid/icatBuild.git ~/.grunt-init/icatBuild
