@@ -24,7 +24,8 @@ module.exports = function(grunt){
     min: {
       dist: {
         files: {
-          '': ['<%=jsPath%>/**/*.source.js']
+          '<%=jsPath%>/main.js': ['<%=jsPath%>/main.source.js'],
+          '<%=jsPath%>/{%=name%}.js': ['<%=jsPath%>/**/*.source.js', '!<%=jsPath%>/main.source.js']
         }
       }
     },

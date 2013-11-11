@@ -75,7 +75,7 @@ exports.template = function(grunt, init, done) {
     }
 
     // Actually copy (and process) files.
-    grunt.file.mkdir(path);
+    //grunt.file.mkdir(path);
     init.copyAndProcess(files, props);
 
     // Generate package.json file.

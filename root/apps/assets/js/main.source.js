@@ -10,7 +10,9 @@
 		return {
 			version: '{%=(subapp? subapp+"-" : "") + version%}',
 			init: function(){
-				// your code...
+				iCat.include('./{%=name%}', function(){
+					// your code...
+				});
 			}
 		};
 	});
