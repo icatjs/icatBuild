@@ -31,9 +31,8 @@ exports.template = function(grunt, init, done) {
       name: 'hasMVC',
       message: 'Does the applation have mvc?',
       default: 'Y/n'
-    }/*,
-    init.prompt('timestamp'),
-    init.prompt('icatVersion')*/
+    },
+    init.prompt('staticPath')
   ], function(err, props) {
     props.devDependencies = {
       'grunt-contrib-stylus': '~0.10.0',
@@ -48,8 +47,8 @@ exports.template = function(grunt, init, done) {
     props.description = 'This is the applation.';
     props.repository = '';
 
-    /*props.icatVersion = props.icatVersion? props.icatVersion : '1.1.6';
-    props.timestamp = props.timestamp? props.timestamp : '20131110';*/
+    props.appPrefix = props.staticPath? '~' : '';
+    props.staticPath = props.staticPath? props.staticPath.replace(/(\w)$/, '$1/') : '';
     props.hasMVC = /y/i.test(props.hasMVC);
 
     if(props.name.indexOf('.')>-1){
@@ -61,7 +60,7 @@ exports.template = function(grunt, init, done) {
     // Files to copy (and process).
     props.appName = props.name.toLocaleUpperCase();
     var exp = /^apps\//i, files = init.filesToCopy(props),
-        path = 'apps/' + props.name + (props.subapp? '/'+props.subapp : '');
+        path = props.staticPath + 'apps/' + props.name + (props.subapp? '/'+props.subapp : '');
     
     // adjustment
     for(var k in files){

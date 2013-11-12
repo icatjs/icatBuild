@@ -34,13 +34,13 @@ module.exports = function(grunt){
 
   // main
   grunt.initConfig({
-    cssPath: 'apps/{%=name%}{%=(subapp? "/"+subapp: "")%}/assets/css',
-    jsPath: 'apps/{%=name%}{%=(subapp? "/"+subapp: "")%}/assets/js',
+    cssPath: '{%=staticPath%}apps/{%=name%}{%=(subapp? "/"+subapp: "")%}/assets/css',
+    jsPath: '{%=staticPath%}apps/{%=name%}{%=(subapp? "/"+subapp: "")%}/assets/js',
 
     stylus: {
       dist: {
         name: 'main',
-        src: ['<%=cssPath%>/*.styl'],
+        src: ['{%=staticPath%}sys/reset/phonecore.source.styl', '<%=cssPath%>/*.styl'],
         dest: '<%=cssPath%>/<%=stylus.dist.name%>.source.css'
       }
     },
