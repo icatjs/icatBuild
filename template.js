@@ -25,18 +25,19 @@ exports.template = function(grunt, init, done) {
   init.process({}, [
     // Prompt for these values.
     init.prompt('name'),
-    init.prompt('author_name'),
-    init.prompt('version'),
+    init.prompt('author_name', 'author'),
+    init.prompt('version', '0.0.1'),
     {
       name: 'hasMVC',
       message: 'Does the applation have mvc?',
       default: 'Y/n'
     },
-    init.prompt('staticPath')
+    init.prompt('staticPath', '../../repos')
   ], function(err, props) {
     props.devDependencies = {
-      'grunt-contrib-stylus': '~0.10.0',
       'grunt-contrib-concat': '~0.3.0',
+      'grunt-contrib-stylus': '~0.10.0',
+      'grunt-contrib-compass': '~0.6.0',
       'grunt-yui-compressor': '~0.3.0',
       'grunt-contrib-watch': '~0.4.0'
     };

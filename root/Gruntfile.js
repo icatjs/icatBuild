@@ -3,7 +3,7 @@
 module.exports = function(grunt){
   // compress
   grunt.registerMultiTask('concatMin', 'YUI-Compressor', function(){
-    if(this.target.toLocaleLowerCase()==='css'){
+    if(/css/i.test(this.target)){
       grunt.config('cssmin', this.files);
       grunt.task.run('cssmin');
     }
@@ -22,7 +22,7 @@ module.exports = function(grunt){
             ofs[f.split('.source').join('')] = f;
         });
     });
-    if(this.target.toLocaleLowerCase()==='css'){
+    if(/css/i.test(this.target)){
       grunt.config('cssmin', ofs);
       grunt.task.run('cssmin');
     }
@@ -33,22 +33,41 @@ module.exports = function(grunt){
   });
 
   // main
+  var appRoot = '{%=staticPath%}apps/{%=name%}{%=(subapp? "/"+subapp: "")%}',
+      coreCSS = '{%=staticPath%}sys/reset/phonecore.source.css',
+      tasks = ['compass', 'stylus', 'concat', 'concatMin:css', 'singleMin:js'];
   grunt.initConfig({
-    cssPath: '{%=staticPath%}apps/{%=name%}{%=(subapp? "/"+subapp: "")%}/assets/css',
-    jsPath: '{%=staticPath%}apps/{%=name%}{%=(subapp? "/"+subapp: "")%}/assets/js',
+    srcPath: appRoot+'/src',
+    cssPath: appRoot+'/assets/css',
+    jsPath: appRoot+'/assets/js',
+
+    compass: {
+      dist: {
+        options: {
+          sassDir: '<%=srcPath%>',
+          cssDir: '<%=cssPath%>'
+        }
+      }
+    },
 
     stylus: {
       dist: {
-        name: 'main',
-        src: ['{%=staticPath%}sys/reset/phonecore.source.styl', '<%=cssPath%>/*.styl'],
-        dest: '<%=cssPath%>/<%=stylus.dist.name%>.source.css'
+        src: ['<%=srcPath%>/*.styl'],
+        dest: '<%=cssPath%>/stylFiles.source.css'
+      }
+    },
+
+    concat: {
+      dist: {
+        src: [coreCSS, '<%=cssPath%>/*.source.css'],
+        dest: '<%=cssPath%>/main.source.css'
       }
     },
     
     concatMin: {
       css: {
         files: {
-          '<%=cssPath%>/<%=stylus.dist.name%>.css': ['<%=stylus.dist.dest%>']
+          '<%=cssPath%>/main.css': ['<%=concat.dist.dest%>']
         }
       }
     },
@@ -60,14 +79,28 @@ module.exports = function(grunt){
     },
 
     watch: {
-      files: ['<%=cssPath%>/*.styl', '<%=jsPath%>/**/*.source.js'],
-      tasks: ['stylus', 'concatMin:css', 'singleMin:js']
+      script: {
+        files: ['<%=jsPath%>/**/*.source.js'],
+        tasks: ['singleMin:js']
+      },
+
+      scss: {
+        files: ['<%=srcPath%>/*.scss'],
+        tasks: ['compass', 'concat', 'concatMin:css']
+      },
+
+      stylus: {
+        files: ['<%=srcPath%>/*.styl'],
+        tasks: ['stylus', 'concat', 'concatMin:css']
+      }
     }
   });
 
   // tasks
+  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-stylus');
+  grunt.loadNpmTasks('grunt-contrib-compass');
   grunt.loadNpmTasks('grunt-yui-compressor');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.registerTask('default', ['stylus', 'concatMin:css', 'singleMin:js', 'watch']);
+  grunt.registerTask('default', tasks.concat('watch'));
 };
