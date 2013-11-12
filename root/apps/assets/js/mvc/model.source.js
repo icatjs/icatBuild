@@ -1,7 +1,7 @@
-/** {%=name%}-model.js # */
+/** {%=appName%}-model.js # */
 (function(iCat){
 	// Class
-	{%=name%}.Model = iCat.Model.extend({
+	{%=appName%}.Model = iCat.Model.extend({
 		propTest: '公用属性',
 		fnTest: function(){
 			alert('公用方法');
@@ -9,7 +9,7 @@
 	});
 
 	// setting
-	{%=name%}.setting = {
+	{%=appName%}.setting = {
 		// your settings...
 	};
 })(ICAT);

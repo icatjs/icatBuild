@@ -1,11 +1,10 @@
-/** {%=name%}-Controller.js # */
+/** {%=appName%}-Controller.js # */
 (function(iCat){
-
 	// Class
-	{%=name%}.Controller = iCat.Controller.extend({
+	{%=appName%}.Controller = iCat.Controller.extend({
 		config: {
-			View: {%=name%}.View,
-			Model: {%=name%}.Model
+			View: {%=appName%}.View,
+			Model: {%=appName%}.Model
 		},
 
 		routes: {

@@ -5,5 +5,5 @@
 <meta name="format-detection" content="email=no" />
 
 <link rel="stylesheet" href="<?php echo "$webroot/$sysRef/reset/phonecore$source.css$timestamp";?>" />
-<script type="text/javascript" src="<?php echo "$webroot/$sysRef/icat/{%=icatVersion%}/icat$source.js$timestamp";?>"
+<script type="text/javascript" src="<?php echo "$webroot/$sysRef/icat/1.1.6/icat$source.js$timestamp";?>"
 	data-main="<?php echo "$appRef/assets/js/main";?>" data-cssfile="<?php echo "../css/main.css";?>"></script>

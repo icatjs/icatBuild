@@ -6,17 +6,21 @@
 
 (function(iCat){
 	//定义应用
-	iCat.app('{%=name%}', function(){
+	iCat.app('{%=appName%}', function(){
 		return {
 			version: '{%=(subapp? subapp+"-" : "") + version%}',
 			init: function(){
-				iCat.include('./{%=name%}', function(){
-					// your code...
-				});
+				{% if(hasMVC){ %}iCat.require({
+					modName: 'appmvc',
+					callback: function(){
+						var c = new {%=appName%}.Controller('mc');
+						// your code...
+					}
+				});{% }else{print('// your code...')}%}
 			}
 		};
 	});
 
 	//初始化
-	{%=name%}.init();
+	{%=appName%}.init();
 })(ICAT);
