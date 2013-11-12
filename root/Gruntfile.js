@@ -1,6 +1,38 @@
 'use strict';
 
 module.exports = function(grunt){
+  // compress
+  grunt.registerMultiTask('concatMin', 'YUI-Compressor', function(){
+    if(this.target.toLocaleLowerCase()==='css'){
+      grunt.config('cssmin', this.files);
+      grunt.task.run('cssmin');
+    }
+    else {
+      grunt.config('min', this.files);
+      grunt.task.run('min');
+    }
+  });
+
+  // singleCompress
+  grunt.registerMultiTask('singleMin', 'YUI Compressor for the single file', function(){
+    var ofs = {};
+    this.files.forEach(function(file) {
+        file.src.forEach(function(f){
+          if(f.indexOf('*')<0)
+            ofs[f.split('.source').join('')] = f;
+        });
+    });
+    if(this.target.toLocaleLowerCase()==='css'){
+      grunt.config('cssmin', ofs);
+      grunt.task.run('cssmin');
+    }
+    else {
+      grunt.config('min', ofs);
+      grunt.task.run('min');
+    }
+  });
+
+  // main
   grunt.initConfig({
     cssPath: 'apps/{%=name%}{%=(subapp? "/"+subapp: "")%}/assets/css',
     jsPath: 'apps/{%=name%}{%=(subapp? "/"+subapp: "")%}/assets/js',
@@ -12,32 +44,30 @@ module.exports = function(grunt){
         dest: '<%=cssPath%>/<%=stylus.dist.name%>.source.css'
       }
     },
-
-    cssmin: {
-      dist: {
+    
+    concatMin: {
+      css: {
         files: {
           '<%=cssPath%>/<%=stylus.dist.name%>.css': ['<%=stylus.dist.dest%>']
         }
       }
     },
 
-    min: {
-      dist: {
-        files: {
-          '<%=jsPath%>/main.js': ['<%=jsPath%>/main.source.js'],
-          '<%=jsPath%>/{%=name%}.js': ['<%=jsPath%>/**/*.source.js', '!<%=jsPath%>/main.source.js']
-        }
+    singleMin: {
+      js: {
+        src: ['<%=jsPath%>/**/*.source.js']
       }
     },
 
     watch: {
       files: ['<%=cssPath%>/*.styl', '<%=jsPath%>/**/*.source.js'],
-      tasks: ['stylus', 'cssmin', 'min']
+      tasks: ['stylus', 'concatMin:css', 'singleMin:js']
     }
   });
 
+  // tasks
   grunt.loadNpmTasks('grunt-contrib-stylus');
   grunt.loadNpmTasks('grunt-yui-compressor');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.registerTask('default', ['stylus', 'cssmin', 'min', 'watch']);
+  grunt.registerTask('default', ['stylus', 'concatMin:css', 'singleMin:js', 'watch']);
 };
