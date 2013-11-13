@@ -32,7 +32,11 @@ exports.template = function(grunt, init, done) {
       message: 'Does the applation have mvc?',
       default: 'Y/n'
     },
-    init.prompt('staticPath', '../../repos')
+    {
+      name: 'staticPath',
+      message: 'set the staticPath, such as "../../repos".',
+      default: ' '
+    }
   ], function(err, props) {
     props.devDependencies = {
       'grunt-contrib-concat': '~0.3.0',
@@ -43,10 +47,11 @@ exports.template = function(grunt, init, done) {
     };
 
     props.name = props.name.toLocaleLowerCase();
+    props.staticPath = props.staticPath.replace(/\s+/g, '');
     props.subapp = '';
     props.keywords = [];
-    props.description = 'This is the applation.';
     props.repository = '';
+    props.description = 'This is the applation.';
 
     props.appPrefix = props.staticPath? '~' : '';
     props.staticPath = props.staticPath? props.staticPath.replace(/(\w)$/, '$1/') : '';
