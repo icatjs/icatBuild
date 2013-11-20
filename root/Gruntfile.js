@@ -1,6 +1,14 @@
 'use strict';
 
 module.exports = function(grunt){
+  var changeFiles;
+  grunt.event.on('watch', function(action, filepath){
+    changeFiles = [];
+    changeFiles.push(
+      filepath.replace(/[^\/]+\/|\//g, '')
+    );
+  });
+
   // compress
   grunt.registerMultiTask('concatMin', 'YUI-Compressor', function(){
     if(/css/i.test(this.target)){
@@ -17,11 +25,18 @@ module.exports = function(grunt){
   grunt.registerMultiTask('singleMin', 'YUI Compressor for the single file', function(){
     var ofs = {};
     this.files.forEach(function(file) {
-        file.src.forEach(function(f){
-          if(f.indexOf('*')<0)
+      file.src.forEach(function(f){
+        if(f.indexOf('*')<0){
+          if(changeFiles){
+            var _f = f.replace(/[^\/]+\/|\//g, '');
+            if(changeFiles.indexOf(_f)!==-1)
+              ofs[f.split('.source').join('')] = f;
+          } else
             ofs[f.split('.source').join('')] = f;
-        });
+        }
+      });
     });
+    grunt.log.writeln('Some single files begin compressing...');
     if(/css/i.test(this.target)){
       grunt.config('cssmin', ofs);
       grunt.task.run('cssmin');
@@ -59,7 +74,7 @@ module.exports = function(grunt){
 
     concat: {
       dist: {
-        src: [coreCSS, '<%=cssPath%>/*.source.css'],
+        src: [coreCSS, '<%=cssPath%>/*.source.css', '!<%=cssPath%>/main.source.css'],
         dest: '<%=cssPath%>/main.source.css'
       }
     },
