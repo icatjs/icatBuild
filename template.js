@@ -43,7 +43,7 @@ exports.template = function(grunt, init, done) {
       'grunt-contrib-stylus': '~0.10.0',
       'grunt-contrib-compass': '~0.6.0',
       'grunt-yui-compressor': '~0.3.0',
-      'grunt-contrib-watch': '~0.4.0'
+      'grunt-contrib-watch': '~0.5.3'
     };
 
     props.name = props.name.toLocaleLowerCase();

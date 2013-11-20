@@ -94,19 +94,24 @@ module.exports = function(grunt){
     },
 
     watch: {
+      options: {
+        spawn: false
+      },
+      scss: {
+        files: ['<%=srcPath%>/*.scss'],
+        tasks: ['compass', 'concat']
+      },
+      stylus: {
+        files: ['<%=srcPath%>/*.styl'],
+        tasks: ['stylus', 'concat']
+      },
+      css: {
+        files: ['<%=cssPath%>/*.source.css'],
+        tasks: ['singleMin:css']
+      },
       script: {
         files: ['<%=jsPath%>/**/*.source.js'],
         tasks: ['singleMin:js']
-      },
-
-      scss: {
-        files: ['<%=srcPath%>/*.scss'],
-        tasks: ['compass', 'concat', 'concatMin:css']
-      },
-
-      stylus: {
-        files: ['<%=srcPath%>/*.styl'],
-        tasks: ['stylus', 'concat', 'concatMin:css']
       }
     }
   });
