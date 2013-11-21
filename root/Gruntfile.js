@@ -1,10 +1,8 @@
 'use strict';
 
 module.exports = function(grunt){
-  var changeFiles;
   grunt.event.on('watch', function(action, filepath){
-    changeFiles = [];
-    changeFiles.push(
+    (grunt.__changed_files = []).push(
       filepath.replace(/[^\/]+\/|\//g, '')
     );
   });
@@ -27,15 +25,16 @@ module.exports = function(grunt){
     this.files.forEach(function(file) {
       file.src.forEach(function(f){
         if(f.indexOf('*')<0){
-          if(changeFiles){
+          if(grunt.__changed_files){
             var _f = f.replace(/[^\/]+\/|\//g, '');
-            if(changeFiles.indexOf(_f)!==-1)
+            if(grunt.__changed_files.indexOf(_f)!==-1)
               ofs[f.split('.source').join('')] = f;
           } else
             ofs[f.split('.source').join('')] = f;
         }
       });
     });
+    
     grunt.log.writeln('Some single files begin compressing...');
     if(/css/i.test(this.target)){
       grunt.config('cssmin', ofs);
@@ -107,7 +106,7 @@ module.exports = function(grunt){
       },
       css: {
         files: ['<%=cssPath%>/*.source.css'],
-        tasks: ['singleMin:css']
+        tasks: ['concatMin:css']
       },
       script: {
         files: ['<%=jsPath%>/**/*.source.js'],
