@@ -101,16 +101,24 @@ exports.template = function(grunt, init, done) {
 
     for(var k in files){
       if(exp.test(k)){
-        if(!hasmvc && /\/mvc\//i.test(k)){
+        if(!hasmvc && /mvc\//i.test(k)){
           delete files[k];
           continue;
         }
-        if(noMerged){
-          /\/src\//i.test(k) && delete files[k];
+        if(noMerged && /src[\w\/\.]+js$/i.test(k)){
+          delete files[k];
+          continue;
+        }
+        if(cssStylus && /src[\w\/\.]+scss$/i.test(k)){
+          delete files[k];
+          continue;
+        }
+        if(!cssStylus && /src[\w\/\.]+styl$/i.test(k)){
+          delete files[k];
           continue;
         }
         
-        files[k.replace(/name/gi, props.name).replace(exp, path)] = files[k];
+        files[k.replace(exp, path).replace(/name([^\/]+)$/gi, props.name+'$1')] = files[k];
         delete files[k];
       }
     }

@@ -91,7 +91,8 @@ module.exports = function(grunt){
   {% } %}
 {% }else{ %}
   // concat mode
-  tasks = [{%=(cssStylus? "stylus":"'compass', 'concat:css'")%}, 'concat:js', 'cssmin', 'min'];
+  tasks = [{%=(cssStylus? "'stylus'":"'compass', 'concat:css'")%}, 'concat:js', 'cssmin', 'min'];
+  grunt.loadNpmTasks('grunt-contrib-concat');
   mix(cfg, {
     cssmin: {
       dist: {
@@ -121,7 +122,7 @@ module.exports = function(grunt){
       },
       script: {
         files: ['<%=srcPath%>/*.js'],
-        tasks: ['concat:js']
+        tasks: ['concat:js', 'min']
       },
       js: {
         files: ['<%=jsPath%>/**/*.source.js'],
@@ -167,7 +168,6 @@ module.exports = function(grunt){
   });
 
   // tasks
-  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-yui-compressor');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.registerTask('default', tasks.concat('watch'));
