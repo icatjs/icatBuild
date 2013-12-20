@@ -1,6 +1,6 @@
 /*
  * icat-build
- * https://gruntjs.com/
+ * https://github.com/valleykid/icatBuild
  *
  * Copyright (c) 2013 valleykid
  * Licensed under the MIT license.
@@ -28,60 +28,100 @@ exports.template = function(grunt, init, done) {
     init.prompt('author_name', 'author'),
     init.prompt('version', '0.0.1'),
     {
-      name: 'hasMVC',
-      message: 'Does the applation have mvc?',
+      name: 'icat_mvc',
+      message: 'Do you want to use icat-mvc?',
       default: 'Y/n'
     },
     {
-      name: 'staticPath',
-      message: 'set the staticPath, such as "../../repos".',
-      default: ' '
+      name: 'css_tool',
+      message: 'Which one do you use, Stylus or compass?',
+      default: 'S/c'
+    },
+    {
+      name: 'merge_file',
+      message: 'Do you want to merge css/js files?',
+      default: 'N/y'
+    },
+    {
+      name: 'static_path',
+      message: 'Set the static path, such as "../../repos".',
+      default: ''
     }
   ], function(err, props) {
     props.devDependencies = {
-      'grunt-contrib-concat': '~0.3.0',
-      'grunt-contrib-stylus': '~0.10.0',
-      'grunt-contrib-compass': '~0.6.0',
       'grunt-yui-compressor': '~0.3.0',
+      //'grunt-contrib-uglify': '~0.2.2',
       'grunt-contrib-watch': '~0.5.3'
     };
 
-    props.name = props.name.toLocaleLowerCase();
-    props.staticPath = props.staticPath.replace(/\s+/g, '');
-    props.subapp = '';
+    var staticPath = props.static_path.replace(/\s+/, ''),
+        appName = props.name.toLocaleLowerCase(),
+        cssStylus = /s/i.test(props.css_tool),
+        hasmvc = /y/i.test(props.icat_mvc), noMerged = /n/i.test(props.merge_file);
+
     props.keywords = [];
     props.repository = '';
-    props.description = 'This is the applation.';
+    props.description = 'This is an applation.';
 
-    props.appPrefix = props.staticPath? '~' : '';
-    props.staticPath = props.staticPath? props.staticPath.replace(/(\w)$/, '$1/') : '';
-    props.hasMVC = /y/i.test(props.hasMVC);
+    props.icat_mvc = hasmvc;
+    props.subapp = '';
+    props.prefix = '';
 
-    if(props.name.indexOf('.')>-1){
-      var arrName = props.name.split('.');
+    if(staticPath){
+      props.static_path = staticPath.replace(/(\w)$/, '$1/');
+      props.prefix = '~';
+    }
+
+    if(appName.indexOf('.')>-1){
+      var arrName = appName.split('.');
       props.name = arrName[0];
       props.subapp = arrName[1];
     }
 
-    // Files to copy (and process).
     props.appName = props.name.toLocaleUpperCase();
-    var exp = /^apps\//i, files = init.filesToCopy(props),
-        path = props.staticPath + 'apps/' + props.name + (props.subapp? '/'+props.subapp : '');
+    props.cssStylus = cssStylus;
+    props.noMerged = noMerged;
+
+    // Files to copy (and process).
+    var exp = /^apps\//i,
+        files = init.filesToCopy(props),
+        folders = noMerged? ['src', 'pic', 'assets/css', 'assets/img'] : ['pic', 'assets/css', 'assets/img'],
+        path = props.static_path + 'apps/' + props.name + (props.subapp? '/'+props.subapp : '') + '/';
     
     // adjustment
+    if(!noMerged){
+      props.devDependencies['grunt-contrib-concat'] = '~0.3.0';
+    }
+
+    if(cssStylus){
+      props.devDependencies['grunt-contrib-stylus'] = '~0.10.0';
+    } else {
+      props.devDependencies['grunt-contrib-compass'] = '~0.6.0';
+    }
+
     for(var k in files){
       if(exp.test(k)){
-        if(!props.hasMVC && /\/mvc/i.test(k)){
+        if(!hasmvc && /\/mvc\//i.test(k)){
           delete files[k];
-        } else {
-          files[k.replace(/name/gi, props.name).replace(exp, path+'/')] = files[k];
-          delete files[k];
+          continue;
         }
+        if(noMerged){
+          /\/src\//i.test(k) && delete files[k];
+          continue;
+        }
+        
+        files[k.replace(/name/gi, props.name).replace(exp, path)] = files[k];
+        delete files[k];
       }
     }
 
     // Actually copy (and process) files.
-    //grunt.file.mkdir(path);
+    for(var i=0, len=folders.length; i<len; i++){
+      /*var f = folders[i];
+      /\.\w+$/.test(f)?
+        grunt.file.write(path+f, '/* '+props.name+'-app\'s files /') : grunt.file.mkdir(path+f);*/
+      grunt.file.mkdir(path+folders[i]);
+    }
     init.copyAndProcess(files, props);
 
     // Generate package.json file.

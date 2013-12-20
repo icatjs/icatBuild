@@ -10,13 +10,33 @@
 		return {
 			version: '{%=(subapp? subapp+"-" : "") + version%}',
 			init: function(){
-				{% if(hasMVC){ %}iCat.require({
+				{%
+					if(icat_mvc){
+				%}iCat.require({
 					modName: 'appmvc',
 					callback: function(){
 						var c = new {%=appName%}.Controller('mc');
-						// your code...
+						{%
+							if(noMerged){
+						print('// your code...');
+							}else{
+						%}iCat.include('./{%=name%}', function(){
+							// your code...
+						});{%
+							}
+						%}
 					}
-				});{% }else{print('// your code...')}%}
+				});{%
+					}
+					else if(noMerged){
+				print('// your code...');
+					}
+					else{
+				%}iCat.include('./{%=name%}', function(){
+					// your code...
+				});{%
+					}
+				%}
 			}
 		};
 	});

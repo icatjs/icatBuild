@@ -13,5 +13,5 @@ $webroot   = $isLocal? $root : 'http://assets.3gtest.gionee.com';
 $sysRef    = 'sys';
 $appRef    = 'apps/{%=name%}{%=(subapp? "/"+subapp: "")%}';
 $appPic    = $appRef.'/pic';
-$timestamp = '?t=20131112';
+$timestamp = '?t='.time();
 ?>
