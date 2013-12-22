@@ -118,7 +118,9 @@ exports.template = function(grunt, init, done) {
           continue;
         }
         
-        files[k.replace(exp, path).replace(/name([^\/]+)$/gi, props.name+'$1')] = files[k];
+        var _k = k.replace(exp, path)
+                  .replace(/name([^\/]+)$/gi, props.name+(noMerged && !cssStylus? '.source':'')+'$1');
+        files[_k] = files[k];
         delete files[k];
       }
     }

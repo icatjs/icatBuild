@@ -46,7 +46,7 @@ module.exports = function(grunt){
     watch: {
       options: {
         spawn: false,
-        event: ['added', 'changed']
+        event: ['added', 'changed', 'created']
       },
       css: {
         files: ['<%=cssPath%>/*.source.css'],
@@ -79,7 +79,8 @@ module.exports = function(grunt){
   cfg.compass = {
     dist: {
       options: {
-        sassDir: '<%=srcPath%>', cssDir: '<%=cssPath%>'
+        sassDir: '<%=srcPath%>', cssDir: '<%=cssPath%>',
+        noLineComments: true
       }
     }
   };
@@ -118,13 +119,17 @@ module.exports = function(grunt){
     watch: {
       options: {
         spawn: false,
-        event: ['added', 'changed']
+        event: ['added', 'changed', 'created']
+      },
+      concatJS: {
+        files: ['<%=srcPath%>/*.js'],
+        tasks: ['concat:js']
+      },
+      css: {
+        files: ['<%=cssPath%>/*.source.css'],
+        tasks: ['cssmin']
       },
       script: {
-        files: ['<%=srcPath%>/*.js'],
-        tasks: ['concat:js', 'min']
-      },
-      js: {
         files: ['<%=jsPath%>/**/*.source.js'],
         tasks: ['min']
       }
@@ -139,14 +144,15 @@ module.exports = function(grunt){
   };
   cfg.watch.stylus = {
     files: ['<%=srcPath%>/*.styl'],
-    tasks: ['stylus', 'cssmin']
+    tasks: ['stylus']
   };
   grunt.loadNpmTasks('grunt-contrib-stylus');
   {% }else{ %}
   cfg.compass = {
     dist: {
       options: {
-        sassDir: '<%=srcPath%>', cssDir: '<%=srcPath%>'
+        sassDir: '<%=srcPath%>', cssDir: '<%=srcPath%>',
+        noLineComments: true
       }
     }
   };
@@ -156,15 +162,17 @@ module.exports = function(grunt){
   };
   cfg.watch.compass = {
     files: ['<%=srcPath%>/*.scss'],
-    tasks: ['compass', 'concat:css', 'cssmin']
+    tasks: ['compass', 'concat:css']
   };
   grunt.loadNpmTasks('grunt-contrib-compass');{%
   } %}
-{% } %}
+{% } %} // run
   grunt.initConfig(cfg);
   grunt.event.on('watch', function(action, filepath) {
-    grunt.config('cssmin.dist.src', filepath);
-    grunt.config('min.dist.src', filepath);
+    if(grunt.file.isMatch(grunt.config('watch.css.files'), filepath))
+      grunt.config('cssmin.dist.src', filepath);
+    if(grunt.file.isMatch(grunt.config('watch.script.files'), filepath))
+      grunt.config('min.dist.src', filepath);
   });
 
   // tasks
