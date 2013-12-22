@@ -21,7 +21,7 @@ module.exports = function(grunt){
 			cssPath: appRoot+'/assets/css', jsPath: appRoot+'/assets/js'
 		};
 
-	grunt.loadNpmTasks('grunt-contrib-compass');
+	grunt.loadNpmTasks('grunt-contrib-stylus');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-yui-compressor');
 	grunt.loadNpmTasks('grunt-contrib-watch');
