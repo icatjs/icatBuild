@@ -47,13 +47,14 @@ exports.template = function(grunt, init, done){
 			default: ''
 		}
 	], function(err, props){
+		props.name = props.name.toLocaleLowerCase();
 		props.devDependencies = {
 			'grunt-yui-compressor': '~0.3.0',
 			'grunt-contrib-watch': '~0.5.3'
 		};
 
 		var staticPath = props.static_path.replace(/\s+/, ''),
-			appName = props.name.toLocaleLowerCase(), cssStylus = /s/i.test(props.css_tool),
+			appName = props.name, cssStylus = /s/i.test(props.css_tool),
 			hasmvc = /y/i.test(props.icat_mvc), noMerged = !/y/i.test(props.merge_file),
 			gfReg = new RegExp('Gruntfile' + (cssStylus? '1':'0') + (noMerged? '0':'1') + '\\.js$');
 

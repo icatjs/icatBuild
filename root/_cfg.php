@@ -13,5 +13,5 @@ $webroot   = $isLocal? $root : 'http://assets.3gtest.gionee.com';
 $sysRef    = 'sys';
 $appRef    = 'apps/{%=name%}{%=(subapp? "/"+subapp: "")%}';
 $appPic    = $appRef.'/pic';
-$timestamp = '?t='.time();
+$timestamp = '?t='.date('Ymd', time());//fixed bug: 每次刷新发生变化，影响调试
 ?>

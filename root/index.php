@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <?php include '_cfg.php';?>
-<html<?php echo ($ucClass? 'class="'.$ucClass.'"' : '');?>>
+<html<?php echo ($ucClass? ' class="'.$ucClass.'"' : '');?>>
 <head>
 	<meta charset="UTF-8">
 	<title>{%=name%} application</title>

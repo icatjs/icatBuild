@@ -2,14 +2,11 @@
 (function(iCat){
 	// Class
 	{%=appName%}.Model = iCat.Model.extend({
-		propTest: '公用属性',
-		fnTest: function(){
-			alert('公用方法');
-		}
+		// model's common config & property & function
 	});
 
 	// setting
-	{%=appName%}.setting = {
-		// your settings...
+	{%=appName%}.Model.setting = {
+		// model's settings...
 	};
 })(ICAT);

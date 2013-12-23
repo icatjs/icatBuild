@@ -2,19 +2,16 @@
 (function(iCat){
 	// templates
 	{%=appName%}.template = {
-		// your templates...
+		// view's templates...
 	};
 
 	// Class
 	{%=appName%}.View = iCat.View.extend({
-		propTest: '公用属性',
-		fnTest: function(){
-			alert('公用方法');
-		}
+		// view's common config & property & function
 	});
 
 	// setting
-	{%=appName%}.setting = {
-		// your settings...
+	{%=appName%}.View.setting = {
+		// view's settings...
 	};
 })(ICAT);

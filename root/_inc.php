@@ -6,7 +6,7 @@
 
 {%
 	if(noMerged){
-%}<link rel="stylesheet" href="<?php echo "$webroot/$sysRef/reset/phonecore$source.css$timestamp";?>" />
+%}<link type="text/css" rel="stylesheet" href="<?php echo "$webroot/$sysRef/reset/phonecore$source.css$timestamp";?>" />
 <script type="text/javascript" src="<?php echo "$webroot/$sysRef/icat/1.1.6/icat$source.js$timestamp";?>"
 	data-main="<?php echo "{%=prefix%}$appRef/assets/js/main";?>"></script>{%
 	} else {
