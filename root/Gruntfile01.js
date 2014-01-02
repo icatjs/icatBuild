@@ -29,9 +29,11 @@ module.exports = function(grunt){
 	mix(cfg, //任务配置项
 	{
 		compass: {
-			options: {
-				sassDir: '<%=srcPath%>', cssDir: '<%=srcPath%>',
-				noLineComments: true
+			dist: {
+				options: {
+					sassDir: '<%=srcPath%>', cssDir: '<%=srcPath%>',
+					noLineComments: true
+				}
 			}
 		},
 
