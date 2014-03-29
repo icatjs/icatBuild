@@ -79,7 +79,7 @@ module.exports = function(grunt){
 	grunt.initConfig(cfg);
 	grunt.event.on('watch', function(action, filepath) {
 		if(grunt.file.isMatch(grunt.config('watch.style.files'), filepath)){
-			grunt.config('cssmin.dist.src', cfg.cssPath + '/' + filepath.match(/[^\/]+$/g)[0].replace(/styl/, 'css'));
+			grunt.config('cssmin.dist.src', cfg.cssPath + '/' + filepath.match(/[\w\.]+$/)[0].replace(/styl/, 'css'));
 		}
 		if(grunt.file.isMatch(grunt.config('watch.script.files'), filepath)){
 			grunt.config('min.dist.src', filepath);
